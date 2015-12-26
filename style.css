@@ -1,1 +1,11 @@
 /* test */
+div.cartouche {
+	text-color: gray;
+	background-color: red;
+	text-align: center;
+	width: 100px;
+	height: 60px;
+	padding-top: 40px;
+	float: left;
+	margin-right: 10px;
+}
