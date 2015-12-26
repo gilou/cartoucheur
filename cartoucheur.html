@@ -8,9 +8,11 @@
 	</head>
 	<body>
 		<div id="cartoucheur">
-			<div class="cartouche" onclick="document.getElementById('jingle1').play()"><audio id="jingle1"><source src="jingle1.wav" type="audio/wav"></audio>Jingle 1</div>
-			<div class="cartouche" onclick="document.getElementById('jingle1').play()"><audio id="jingle2"><source src="jingle2.wav" type="audio/wav"></audio>Jingle 2</div>
+			<div class="cartouche"><audio id="jingle1" preload="true"><source src="jingle1.wav" type="audio/wav"></audio>Jingle 1</div>
+			<div class="cartouche"><audio id="jingle2" preload="true"><source src="jingle2.wav" type="audio/wav"></audio>Jingle 2</div>
+			<div class="cartouche" onclick="stopAll()" id="stop">STOP</div>
 		</div>
 	</body>
+	<script src="cartoucheur.js"></script>
 </html>
  
