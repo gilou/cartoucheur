@@ -1,6 +1,12 @@
 var players = [
 		{ id: "jingle1", source: "jingle1.wav", type: "audio/wav" },
 		{ id: "jingle2", source: "jingle2.wav", type: "audio/wav" },
+		{ id: "jingle3", source: "jingle3.mp3", type: "audio/mpeg" },
+		{ id: "jingle4", source: "jingle4.mp3", type: "audio/mpeg" },
+		{ id: "jingle2c", source: "jingle2.wav", type: "audio/wav" },
+		{ id: "jingle2d", source: "jingle2.wav", type: "audio/wav" },
+		{ id: "jingle2e", source: "jingle2.wav", type: "audio/wav" },
+		{ id: "jingle2f", source: "jingle2.wav", type: "audio/wav" },
 	]
 
 var nbPlayers = players.length
