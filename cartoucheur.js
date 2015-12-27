@@ -1,5 +1,3 @@
-
-
 var players = [
 		{ id: "jingle1", source: "jingle1.wav", type: "audio/wav" },
 		{ id: "jingle2", source: "jingle2.wav", type: "audio/wav" },
@@ -16,18 +14,24 @@ function endedCallback(element){
 	element.parentElement.style.backgroundColor = 'red';
 }
 
+function displayBouton(player){
+	etiquette = document.getElementById('label' + player.id);
+	etiquette.innerHTML = player.id +  "<br />"
+	etiquette.innerHTML += Math.round(player.currentTime*100)/100
+													+ " / "
+													+ Math.round(player.duration*100)/100;
+}
+
 /*
  * Create the <div><audio><source /></audio></div>
  * structure
  */
 function createAudioDiv(id, source, type) {
-	player = document.createElement("audio");
+	var container, player, s, etiquette
+	player = new Audio();
 	player.id = id
-	s = document.createElement("source");
-	s.src = source;
-	s.type = type;
-	player.appendChild(s);
-	player.preload = true;
+	player.src = source;
+	player.preload = "auto";
 	container = document.createElement("div");
 	container.className = "cartouche";
 	container.appendChild(player);
@@ -36,14 +40,22 @@ function createAudioDiv(id, source, type) {
 	etiquette.innerHTML = source;
 	container.appendChild(etiquette);
 
-	container.onclick = function() {
-		play(this)
-	}
+
 	player.onended = function() {
-		endedCallback(this)
+		endedCallback(this);
+	}
+	player.ondurationchange = function(){
+		displayBouton(this);
 	}
 
+	player.ontimeupdate = function(){
+				displayBouton(this);
+	}
+	container.onclick = function() {
+		play(this);
+	}
 	return container;
+
 }
 
 for(var i = 0; i < nbPlayers; i++){
@@ -52,8 +64,6 @@ for(var i = 0; i < nbPlayers; i++){
 											players[i].type);
 
 	cartoucheur.insertBefore(container, bouton_stop);
-	
-
 }
 
 function play(container) {
@@ -66,6 +76,7 @@ function play(container) {
 }
 
 function stopAll(){
+
 	var players = document.getElementsByTagName('audio');
 	playersLength = players.length;
 	for( var i = 0; i < playersLength; i++){
