@@ -1,13 +1,13 @@
 /* test */
 div.cartouche {
-	text-color: gray;
+	color: white;
 	background-color: red;
 	text-align: center;
 	width: 200px;
 	height: 120px;
 	padding-top: 80px;
 	float: left;
-	margin: 20px 20px;
+	margin: 20px;
 }
 
 div#stop {
