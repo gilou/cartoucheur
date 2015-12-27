@@ -1,7 +1,7 @@
 /* test */
 div.cartouche {
 	color: white;
-	background-color: red;
+	background-color: rgb(220, 0, 0);
 	text-align: center;
 	width: 200px;
 	height: 120px;
@@ -16,4 +16,5 @@ div#stop {
 	margin-left: 380px;
 	margin-right: 120px;
 	clear: both;
+	background-color: red;
 }

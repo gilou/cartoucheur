@@ -13,7 +13,7 @@ var bouton_stop = document.getElementById('stop')
  * What to do when audio file ends
  */
 function endedCallback(element){
-	element.parentElement.style.backgroundColor = 'red';
+	element.parentElement.style.backgroundColor = 'rgb(220,0,0)';
 	element.parentElement.style.borderColor = 'rgb(255, 100, 100)';
 	element.parentElement.style.borderStyle = 'outset';
 }
