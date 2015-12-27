@@ -8,10 +8,12 @@ div.cartouche {
 	padding-top: 80px;
 	float: left;
 	margin: 20px;
+	border-color: rgb(255, 100, 100);
+	border-style: outset;
 }
 
 div#stop {
-	margin-left: 120px;
+	margin-left: 380px;
 	margin-right: 120px;
 	clear: both;
 }

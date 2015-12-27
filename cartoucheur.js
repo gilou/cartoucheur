@@ -3,10 +3,6 @@ var players = [
 		{ id: "jingle2", source: "jingle2.wav", type: "audio/wav" },
 		{ id: "jingle3", source: "jingle3.mp3", type: "audio/mpeg" },
 		{ id: "jingle4", source: "jingle4.mp3", type: "audio/mpeg" },
-		{ id: "jingle2c", source: "jingle2.wav", type: "audio/wav" },
-		{ id: "jingle2d", source: "jingle2.wav", type: "audio/wav" },
-		{ id: "jingle2e", source: "jingle2.wav", type: "audio/wav" },
-		{ id: "jingle2f", source: "jingle2.wav", type: "audio/wav" },
 	]
 
 var nbPlayers = players.length
@@ -18,6 +14,8 @@ var bouton_stop = document.getElementById('stop')
  */
 function endedCallback(element){
 	element.parentElement.style.backgroundColor = 'red';
+	element.parentElement.style.borderColor = 'rgb(255, 100, 100)';
+	element.parentElement.style.borderStyle = 'outset';
 }
 
 function displayBouton(player){
@@ -76,7 +74,9 @@ function play(container) {
 	// normalement, on a <div><audio>
 	player = container.childNodes[0];
 	player.currentTime = 0;
-	player.parentElement.style.backgroundColor = 'green';
+	container.style.borderStyle = 'inset';
+	container.style.borderColor = 'green';
+	container.style.backgroundColor = 'green';
 	player.play();
 
 }
