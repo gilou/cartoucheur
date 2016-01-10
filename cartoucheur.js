@@ -1,8 +1,8 @@
 var players = [
-		{ id: "jingle1", source: "jingle1.wav", type: "audio/wav" },
-		{ id: "jingle2", source: "jingle2.wav", type: "audio/wav" },
-		{ id: "jingle3", source: "jingle3.mp3", type: "audio/mpeg" },
-		{ id: "jingle4", source: "jingle4.mp3", type: "audio/mpeg" },
+		{ source: "jingle1.wav", type: "audio/wav" },
+		{ source: "jingle2.wav", type: "audio/wav" },
+		{ source: "jingle3.mp3", type: "audio/mpeg" },
+		{ source: "jingle4.mp3", type: "audio/mpeg" },
 	]
 
 /*
@@ -64,14 +64,32 @@ function createAudioButton(id, source, type, rootElement) {
 
 }
 
+function onFile(evt){
+	file = evt.target.files[0];
+	url = URL.createObjectURL(file);
+	player = document.getElementById('player' + evt.target.id.substr(4));
+	if(player.canPlayType(file.type)){
+		console.log('can play' + file.name);
+		player.src = url;
+	}
+	else {
+		console.log('fuck ' + file.name);
+	}
+}
 for(var i = 0; i < nbPlayers; i++){
-	container = createAudioButton(players[i].id,
+	container = createAudioButton('player' + i,
 					players[i].source,
 					players[i].type,
 					cartoucheur
 				     );
 
 	cartoucheur.insertBefore(container, bouton_stop);
+	file = document.createElement("input");
+	file.type = 'file';
+	file.id = 'file' + i;
+	file.addEventListener('change', onFile, false);
+	cartoucheur.insertBefore(file, bouton_stop);
+
 }
 /*
  * Plays or stop the jingle cart
