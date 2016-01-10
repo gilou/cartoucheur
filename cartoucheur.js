@@ -58,7 +58,7 @@ function createAudioButton(id, source, type, rootElement) {
 	}
 
 	container.onclick = function() {
-		play(this);
+		toggle(this);
 	}
 	return container;
 
@@ -73,12 +73,29 @@ for(var i = 0; i < nbPlayers; i++){
 
 	cartoucheur.insertBefore(container, bouton_stop);
 }
-
-function play(container) {
-	// normalement, on a <button id="buttonIDPLAYER">
+/*
+ * Plays or stop the jingle cart
+ */
+function toggle(container){
 	player = document.getElementById(container.id.substr(6));
+	if(player.currentTime == 0 || player.paused){
+		container.style.backgroundColor = 'green';
+		play(player);
+	} else {
+		stop(player);
+	}
+
+}
+function stop(player){
+	player.pause();
 	player.currentTime = 0;
-	container.style.backgroundColor = 'green';
+	endedCallback(player);
+	if (timers[player.id] != undefined) {
+		window.clearInterval(timers[player.id])
+	}
+}
+function play(player) {
+	player.currentTime = 0;
 	timers[player.id] = setInterval(displayBouton, 50, player);
 	player.play();
 
@@ -89,11 +106,6 @@ function stopAll(){
 	var players = document.getElementsByTagName('audio');
 	playersLength = players.length;
 	for( var i = 0; i < playersLength; i++){
-		players[i].pause();
-		players[i].currentTime = 0;
-		endedCallback(players[i]);
-		if (timers[players[i].id] != undefined) {
-			window.clearInterval(timers[players[i].id])
-		}
+		stop(players[i]);
 	}
 }
