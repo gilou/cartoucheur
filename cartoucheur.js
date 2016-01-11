@@ -1,7 +1,7 @@
 players = [ ];
 /* Pour les tests : */
 for(var iinit = 0; iinit < 16 ; iinit++){
-	players.push( { source: "" });
+	players.push( { source: "", loop: false});
 }
 /*
  * Fill it with useless pads
@@ -18,10 +18,17 @@ var timers = {}
 /**
  * What to do when audio file ends
  */
-function endedCallback(element){
-	button = document.getElementById('button' + element.id);
-	button.style.backgroundColor = 'rgb(220,0,0)';
-	displayBouton(element);
+function endedCallback(element, stopped){
+	id = element.id.substr(6);
+	if(players[id].loop && stopped == undefined) {
+		player.currentTime = 0;
+		player.play()
+	}
+	else {
+		button = document.getElementById('button' + element.id);
+		button.style.backgroundColor = 'rgb(220,0,0)';
+	}
+		displayBouton(element);
 }
 
 function displayBouton(player, texte){
@@ -82,6 +89,11 @@ function onFile(evt){
 	}
 }
 
+function onLoop(evt){
+	id = evt.target.id.substr(8);
+	console.log(evt.target.checked);
+	players[id].loop = evt.target.checked;
+}
 for(var i = 0; i < nbPlayers; i++){
 	container = createAudioButton('player' + i,
 					players[i].source,
@@ -94,6 +106,11 @@ for(var i = 0; i < nbPlayers; i++){
 	label.for = 'file' + i;
 	label.innerHTML = i+1;
 
+	loopcheck = document.createElement("input");
+	loopcheck.type = 'checkbox';
+	loopcheck.id = 'checkbox' + i;
+	loopcheck.addEventListener('click', onLoop, false);
+
 	file = document.createElement("input");
 	file.type = 'file';
 	file.id = 'file' + i;
@@ -103,6 +120,7 @@ for(var i = 0; i < nbPlayers; i++){
 	load_div = document.createElement('div')
 	load_div.className = 'chargeur'
 	load_div.appendChild(label);
+	load_div.appendChild(loopcheck);
 	load_div.appendChild(file);
 	chargeur.appendChild(load_div);
 
@@ -129,7 +147,7 @@ function toggle(container){
 function stop(player){
 	player.pause();
 	player.currentTime = 0;
-	endedCallback(player);
+	endedCallback(player, true);
 	if (timers[player.id] != undefined) {
 		window.clearInterval(timers[player.id])
 	}
