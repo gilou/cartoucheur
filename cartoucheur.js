@@ -96,6 +96,7 @@ for(var i = 0; i < nbPlayers; i++){
 	file.type = 'file';
 	file.id = 'file' + i;
 	file.addEventListener('change', onFile, false);
+	file.accept = 'audio/*'
 	load_div = document.createElement('div')
 	load_div.className = 'chargeur'
 	load_div.appendChild(label);
