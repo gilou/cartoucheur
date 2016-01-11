@@ -98,7 +98,10 @@ for(var i = 0; i < nbPlayers; i++){
  */
 function toggle(container){
 	player = document.getElementById(container.id.substr(6));
-	if(player.src == ''){
+	if(player.src == '' || player.src == undefined){
+		fe = document.getElementById('file' + player.id.substr(6));
+		console.log('fouk file' +  fe);
+		fe.click();
 		return false;
 	}
 	if(player.currentTime == 0 || player.paused ){
