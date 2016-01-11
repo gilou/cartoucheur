@@ -138,3 +138,15 @@ function stopAll(){
 		}
 	}
 }
+
+function handleKeys(evt){
+	/* Touches 1 à 9 reliées au player 0 à 8 */
+	if(evt.keyCode > 48 && evt.keyCode <= 57) {
+		evt.preventDefault();
+		id = evt.keyCode-49;
+		player = document.getElementById('buttonplayer' + id);
+		player.click();
+	}
+}
+
+document.body.onkeydown = handleKeys;
