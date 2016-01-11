@@ -81,6 +81,7 @@ function onFile(evt){
 		console.log('fuck ' + file.name);
 	}
 }
+
 for(var i = 0; i < nbPlayers; i++){
 	container = createAudioButton('player' + i,
 					players[i].source,
@@ -92,11 +93,13 @@ for(var i = 0; i < nbPlayers; i++){
 	label = document.createElement('label');
 	label.for = 'file' + i;
 	label.innerHTML = i+1;
+
 	file = document.createElement("input");
 	file.type = 'file';
 	file.id = 'file' + i;
 	file.addEventListener('change', onFile, false);
 	file.accept = 'audio/*'
+
 	load_div = document.createElement('div')
 	load_div.className = 'chargeur'
 	load_div.appendChild(label);
