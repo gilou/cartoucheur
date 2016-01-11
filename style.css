@@ -4,6 +4,14 @@ div#cartoucheur {
 div#chargeur {
 	clear: both;
 }
+div.chargeur {
+	margin-left: 10px;
+	display: inline-block;
+}
+input {
+	width: 180px;
+}
+
 button.cartouche {
 	color: white;
 	background-color: rgb(220, 0, 0);
