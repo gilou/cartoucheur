@@ -1,4 +1,9 @@
-/* test */
+div#cartoucheur {
+}
+
+div#chargeur {
+	clear: both;
+}
 button.cartouche {
 	color: white;
 	background-color: rgb(220, 0, 0);
