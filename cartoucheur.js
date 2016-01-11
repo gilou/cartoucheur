@@ -26,7 +26,8 @@ function endedCallback(element){
 
 function displayBouton(player, texte){
 	if (texte == undefined){
-		texte = players[player.id.substr(6)].source;
+		joli_id = 1 + parseInt(player.id.substr(6));
+		texte = '[' + joli_id + ']  ' +players[player.id.substr(6)].source;
 	}
 	
 	etiquette = document.getElementById('button' + player.id);
@@ -44,11 +45,12 @@ function createAudioButton(id, source, rootElement) {
 	var container, player, s, etiquette
 	player = new Audio();
 	player.id = id
+	joli_id = 1 + parseInt(id.substr(6));
 	player.preload = "auto";
 	container = document.createElement("button");
 	container.id = 'button' + id
 	container.className = "cartouche";
-	container.innerHTML = source;
+	container.innerHTML = '[' + joli_id + ']' + source
 	rootElement.appendChild(player);
 
 
@@ -86,11 +88,19 @@ for(var i = 0; i < nbPlayers; i++){
 				     );
 
 	cartoucheur.insertBefore(container, bouton_stop);
+	
+	label = document.createElement('label');
+	label.for = 'file' + i;
+	label.innerHTML = i+1;
 	file = document.createElement("input");
 	file.type = 'file';
 	file.id = 'file' + i;
 	file.addEventListener('change', onFile, false);
-	chargeur.appendChild(file);
+	load_div = document.createElement('div')
+	load_div.className = 'chargeur'
+	load_div.appendChild(label);
+	load_div.appendChild(file);
+	chargeur.appendChild(load_div);
 
 }
 /*
@@ -144,6 +154,13 @@ function handleKeys(evt){
 	if(evt.keyCode > 48 && evt.keyCode <= 57) {
 		evt.preventDefault();
 		id = evt.keyCode-49;
+		player = document.getElementById('buttonplayer' + id);
+		player.click();
+	}
+
+	if(evt.keyCode > 96 && evt.keyCode <= 105) {
+		evt.preventDefault();
+		id = evt.keyCode-97;
 		player = document.getElementById('buttonplayer' + id);
 		player.click();
 	}
