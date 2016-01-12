@@ -20,9 +20,9 @@ var timers = {}
  */
 function endedCallback(element, stopped){
 	id = element.id.substr(6);
-	if(players[id].loop && stopped == undefined) {
-		player.currentTime = 0;
-		player.play()
+	if(players[id].loop && (stopped == undefined || stopped == false)) {
+		element.currentTime = 0;
+		element.play()
 	}
 	else {
 		button = document.getElementById('button' + element.id);
@@ -62,7 +62,7 @@ function createAudioButton(id, source, rootElement) {
 
 
 	player.onended = function() {
-		endedCallback(this);
+		endedCallback(this, false);
 	}
 	player.ondurationchange = function(){
 		displayBouton(this);
@@ -91,7 +91,6 @@ function onFile(evt){
 
 function onLoop(evt){
 	id = evt.target.id.substr(8);
-	console.log(evt.target.checked);
 	players[id].loop = evt.target.checked;
 }
 for(var i = 0; i < nbPlayers; i++){
