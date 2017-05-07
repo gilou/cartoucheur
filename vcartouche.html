@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+        <head><script src="https://unpkg.com/vue"></script></head>
+        <body>
+                <div id="app"><player-button v-for="player in players" v-bind:player="player" :key="player.id" /></div>
+                <script>
+players = [ ];
+/* Pour les tests : */
+for(var iinit = 1; iinit < 16 ; iinit++){
+	        players.push( { source: "", id: iinit, loop: false });
+}
+
+
+Vue.component('player-button', {
+  props: ['player'],
+  template: '<button>Player {{ player.id }}</button>'
+})
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    players: players
+  }
+})
+		</script>
+        </body>
+</html>
+
