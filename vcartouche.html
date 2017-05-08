@@ -1,47 +1,71 @@
 <!DOCTYPE html>
 <html>
-        <head><script src="https://unpkg.com/vue"></script></head>
+        <head>
+		<script src="https://unpkg.com/vue"></script>
+		<link rel="stylesheet" href="style.css" />
+	</head>
         <body>
-                <div id="app">
-			<input v-on:change="filechanged(i, $event)" style="display: none" type="file" v-for="i in nb_players" :key="i" :id="'file_' + i" />
-			<button v-on:click="click(i)" v-for="i in nb_players" v-bind:player_id="i" :key="i">
-				<audio :id="'audio_' + i"></audio>Player {{ i }}</button>
+		<script type="text/x-template" id="player-template">
+		<div class="chargeur">
+		<slot name="player">
+			<button @click="click" class="cartouche">
+				<audio :src='mysource' ref='player'></audio>
+			{{ mytitle }}
+			</button>
+		</slot>
+		<slot name="file"><input @change="filechanged" type="file" ref='file' /></slot>
+		</div>
+		</script>
+		<div id="player">
+			<div slot="player" class="cartoucheur">
+				<player v-for="i in 10" title='Click me' :key="i"></player>
+			</div>
 			<p>{{ message }}</p>
 		</div>
                 <script>
-var app = new Vue({
-  el: '#app',
-  data: {
-	  nb_players: 5,
-	  message: 'avant cliquette'
+Vue.component('player', {
+  template: '#player-template',
+  props: {
+    title: String,
+  }, 
+  data: function () {
+	  return {
+		  mytitle: this.title,
+		  mysource: undefined,
+		  myfile: '',
+	  }
   },
   methods: {
-    filechanged: function(id, event) {
-      file = event.target.files[0];
-      url = URL.createObjectURL(file);
-      player = document.getElementById('audio_' + id)
-      if(player.canPlayType(file.type)) {
-        player.src = url
+    filechanged: function(event) {
+      file = event.target.files[0]
+      url = URL.createObjectURL(file)
+      var a = new Audio()
+      if(a.canPlayType(file.type)) { 
+        this.mysource = url
+        this.mytitle = file.name
+      } else {
+        console.log("Can't read this.")
       }
-      app.message = 'changed file ' + id + ' to ' + file.name
     },
-    click: function(id) {
-      player = document.getElementById('audio_' + id)
-      if(player.src == '') {
-        f = document.getElementById('file_' + id)
-        f.click()
+    click: function(event) {
+      if(this.mysource === undefined || this.mysource == '') {
+        this.$refs.file.click()
       }
       else {
-	if(!player.paused) {
-		player.pause()
-	}
-	else {
-		player.currentTime = 0;
-		player.play()
-	}
+        player = this.$refs.player
+	if(player.paused) { player.currentTime = 0; player.play() }
+	else { player.pause() }
       }
     }
   }
+})
+
+var app = new Vue({
+  el: '#player',
+  data: {
+	  source: '',
+	  message: 'avant cliquette'
+  },
 })
 		</script>
         </body>
