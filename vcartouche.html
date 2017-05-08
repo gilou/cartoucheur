@@ -2,27 +2,32 @@
 <html>
         <head><script src="https://unpkg.com/vue"></script></head>
         <body>
-                <div id="app"><player-button v-for="player in players" v-bind:player="player" :key="player.id" /></div>
+                <div id="app">
+			<player v-for="i in nb_players" v-bind:player_id="i" :key="i" v-bind:source="''"></player>
+			<p>{{ message }}</p>
+		</div>
                 <script>
-players = [ ];
-/* Pour les tests : */
-for(var iinit = 1; iinit < 16 ; iinit++){
-	        players.push( { source: "", id: iinit, loop: false });
-}
-
-
-Vue.component('player-button', {
-  props: ['player'],
-  template: '<button>Player {{ player.id }}</button>'
+Vue.component('player', {
+  props: ['player_id', 'source', 'repeat'],
+  methods: {
+    coucou: function(event) {
+      alert('Well you clicked me:' + this.audio_id + ' and my source is ' + this.source)
+    }
+  },
+  computed: {
+    audio_id: function() { return 'audio_' + this.player_id },
+    file_id: function() { return 'file_' + this.player_id }
+  },
+  template: '<div><input style="display: none" type="file" :id="file_id" /><label :for="file_id">Fichier pour {{ player_id }}</label><button v-on:click="coucou"><audio :id="audio_id"></audio>Player {{ player_id }}</button></div>'
 })
 
 var app = new Vue({
   el: '#app',
   data: {
-    players: players
-  }
+	  nb_players: 5,
+	  message: 'avant cliquette'
+  },
 })
 		</script>
         </body>
 </html>
-
