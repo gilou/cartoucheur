@@ -18,7 +18,7 @@ Vue.component('player', {
     audio_id: function() { return 'audio_' + this.player_id },
     file_id: function() { return 'file_' + this.player_id }
   },
-  template: '<div><input style="display: none" type="file" :id="file_id" /><label :for="file_id">Fichier pour {{ player_id }}</label><button v-on:click="coucou"><audio :id="audio_id"></audio>Player {{ player_id }}</button></div>'
+  template: '<div><input style="display: none" type="file" :id="file_id" /><button v-on:click="coucou"><audio :id="audio_id" v-bind:source="source"></audio>Player {{ player_id }} {{ source }}</button></div>'
 })
 
 var app = new Vue({
