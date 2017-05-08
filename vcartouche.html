@@ -3,30 +3,44 @@
         <head><script src="https://unpkg.com/vue"></script></head>
         <body>
                 <div id="app">
-			<player v-for="i in nb_players" v-bind:player_id="i" :key="i" v-bind:source="''"></player>
+			<input v-on:change="filechanged(i, $event)" style="display: none" type="file" v-for="i in nb_players" :key="i" :id="'file_' + i" />
+			<button v-on:click="click(i)" v-for="i in nb_players" v-bind:player_id="i" :key="i">
+				<audio :id="'audio_' + i"></audio>Player {{ i }}</button>
 			<p>{{ message }}</p>
 		</div>
                 <script>
-Vue.component('player', {
-  props: ['player_id', 'source', 'repeat'],
-  methods: {
-    coucou: function(event) {
-      alert('Well you clicked me:' + this.audio_id + ' and my source is ' + this.source)
-    }
-  },
-  computed: {
-    audio_id: function() { return 'audio_' + this.player_id },
-    file_id: function() { return 'file_' + this.player_id }
-  },
-  template: '<div><input style="display: none" type="file" :id="file_id" /><button v-on:click="coucou"><audio :id="audio_id" v-bind:source="source"></audio>Player {{ player_id }} {{ source }}</button></div>'
-})
-
 var app = new Vue({
   el: '#app',
   data: {
 	  nb_players: 5,
 	  message: 'avant cliquette'
   },
+  methods: {
+    filechanged: function(id, event) {
+      file = event.target.files[0];
+      url = URL.createObjectURL(file);
+      player = document.getElementById('audio_' + id)
+      if(player.canPlayType(file.type)) {
+        player.src = url
+      }
+      app.message = 'changed file ' + id + ' to ' + file.name
+    },
+    click: function(id) {
+      player = document.getElementById('audio_' + id)
+      if(player.src == '') {
+        f = document.getElementById('file_' + id)
+        f.click()
+      }
+      else {
+	if(!player.paused) {
+		player.pause()
+	}
+	else {
+		player.play()
+	}
+      }
+    }
+  }
 })
 		</script>
         </body>
