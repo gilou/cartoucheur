@@ -3,7 +3,7 @@
         <head>
 		<meta charset="utf-8" />
 		<script src="https://unpkg.com/vue"></script>
-		<link rel="stylesheet" href="style.css" />
+		<link rel="stylesheet" href="style_vue.css" />
 	</head>
         <body>
 		<script type="text/x-template" id="player-template">
@@ -13,7 +13,7 @@
 				<audio @durationchange="updateduration" @playing="playing" @pause="paused" @ended="playended" :src='mysource' ref='player' ></audio>
 			{{ mytitle }} {{ current_position }}/{{ duration }}
 			</button>
-			&#x1F501;<input v-model='loop' type="checkbox" /> <button @click="changefile" v-show="mysource != undefined">&#x23CF;</button>
+			<label style="margin-left: 30px; margin-right: 30px">&#x1F501;<input v-model='loop' type="checkbox" /></label><button @click="changefile">&#x23CF;</button>
 		</slot>
 		<slot name="file"><input v-show="false" @change="filechanged" type="file" ref='file' /></slot>
 		</div>

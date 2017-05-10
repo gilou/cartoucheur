@@ -1,0 +1,39 @@
+div#cartoucheur {
+}
+
+div#chargeur {
+	clear: both;
+}
+div.chargeur {
+	margin-left: 10px;
+	display: inline-block;
+	width: 250px;
+}
+input[type = 'file']{
+	width: 180px;
+}
+
+button.cartouche {
+	background-color: red;
+	color: white;
+	text-align: center;
+	width: 200px;
+	height: 150px;
+	margin: 20px;
+	border-radius: 10px;
+	font-size: 20px;
+}
+
+button.stopped {
+	background-color: red;
+}
+button.started {
+	background-color: green;
+}
+button#stop {
+	margin-left: 300px;
+	margin-right: 20px;
+	clear: both;
+	background-color: red;
+}
+
