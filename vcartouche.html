@@ -13,7 +13,7 @@
 				<audio @durationchange="updateduration" @playing="playing" @pause="paused" @ended="playended" :src='mysource' ref='player' ></audio>
 			{{ mytitle }} {{ current_position }}/{{ duration }}
 			</button>
-			🔄<input v-model='loop' type="checkbox" /> <button @click="changefile" v-show="mysource != undefined>🔼</button>
+			🔄<input v-model='loop' type="checkbox" /> <button @click="changefile" v-show="mysource != undefined">🔼</button>
 		</slot>
 		<slot name="file"><input v-show="false" @change="filechanged" type="file" ref='file' /></slot>
 		</div>
