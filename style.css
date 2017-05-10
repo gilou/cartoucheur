@@ -13,8 +13,8 @@ input[type = 'file']{
 }
 
 button.cartouche {
+	background-color: red;
 	color: white;
-	background-color: rgb(220, 0, 0);
 	text-align: center;
 	width: 150px;
 	height: 100px;
@@ -24,6 +24,12 @@ button.cartouche {
 	font-size: 20px;
 }
 
+button.stopped {
+	background-color: red;
+}
+button.started {
+	background-color: green;
+}
 button#stop {
 	margin-left: 300px;
 	margin-right: 20px;

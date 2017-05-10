@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
         <head>
+		<meta charset="utf-8" />
 		<script src="https://unpkg.com/vue"></script>
 		<link rel="stylesheet" href="style.css" />
 	</head>
@@ -8,12 +9,12 @@
 		<script type="text/x-template" id="player-template">
 		<div class="chargeur">
 		<slot name="player">
-			<button @click="click" class="cartouche">
-				<audio :src='mysource' ref='player'></audio>
-			{{ mytitle }}
+			<button @click="toggle" v-bind:class="['cartouche', playingClass]" >
+				<audio @timeupdate="updateduration" @durationchange="updateduration" @playing="playing" @pause="paused" @ended="playended" :src='mysource' ref='player' ></audio>
+			{{ mytitle }} {{ current_position }}/{{ duration }}
 			</button>
 		</slot>
-		<slot name="file"><input @change="filechanged" type="file" ref='file' /></slot>
+		<slot name="file"><input v-show="false" @change="filechanged" type="file" ref='file' /></slot>
 		</div>
 		</script>
 		<div id="player">
@@ -33,28 +34,50 @@ Vue.component('player', {
 		  mytitle: this.title,
 		  mysource: undefined,
 		  myfile: '',
+		  duration: 0,
+		  current_position: 0,
+		  playingClass: 'stopped',
 	  }
   },
   methods: {
+    updateduration: function(event) {
+      this.duration = Math.round(event.target.duration*100)/100
+      this.current_position = Math.round(event.target.currentTime*100)/100
+    },
+    playended: function(event) {
+      event.target.currentTime = 0
+      event.target.pause()
+    },
     filechanged: function(event) {
       file = event.target.files[0]
       url = URL.createObjectURL(file)
-      var a = new Audio()
-      if(a.canPlayType(file.type)) { 
+      p = this.$refs.player
+      if(p.canPlayType(file.type)) { 
         this.mysource = url
         this.mytitle = file.name
       } else {
         console.log("Can't read this.")
       }
     },
-    click: function(event) {
+    playing: function(event) {
+      this.playingClass = 'started'
+    },
+    paused: function() {
+      this.playingClass = 'stopped'
+    },
+    toggle: function(event) {
       if(this.mysource === undefined || this.mysource == '') {
         this.$refs.file.click()
       }
       else {
         player = this.$refs.player
-	if(player.paused) { player.currentTime = 0; player.play() }
-	else { player.pause() }
+	if(player.paused) {
+          player.currentTime = 0
+          player.play()
+       	}
+	else {
+	  player.pause()
+	}
       }
     }
   }
