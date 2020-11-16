@@ -53,11 +53,11 @@ Vue.component('player', {
       }
     },
     mytitle: function() {
-      if (this.ofile != undefined){
-        return this.ofile.name
-      }
-      else if (this.myfile != ''){
+      if (this.myfile != ''){
         return this.myfile.name
+      }
+      else if (this.ofile != undefined){
+        return this.ofile.name
       }
       else { 
         console.log('No file loaded')
