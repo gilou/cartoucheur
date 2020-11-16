@@ -5,35 +5,67 @@
 		<script src="https://unpkg.com/vue"></script>
 		<link rel="stylesheet" href="style_vue.css" />
 	</head>
-        <body>
+    <body>
 		<script type="text/x-template" id="player-template">
 		<div class="chargeur">
 		<slot name="player">
-			<button @click="toggle" v-bind:class="['cartouche', playingClass]" >
-				<audio @durationchange="updateduration" @playing="playing" @pause="paused" @ended="playended" :src='mysource' ref='player' ></audio>
+			<button @click="toggle" v-bind:class="['cartouche', playingClass]" :id="'player_' + player_id">
+				<audio :id="'audio_' + player_id" @durationchange="updateduration" @playing="playing" @pause="paused" @ended="playended" :src='mysource' ref='player' ></audio>
 			{{ mytitle }} {{ current_position }}/{{ duration }}
 			</button>
-			<label style="margin-left: 30px; margin-right: 30px">&#x1F501;<input v-model='loop' type="checkbox" /></label><button @click="changefile">&#x23CF;</button>
+			<label style="margin-left: 30px; margin-right: 30px">&#x1F501;<input v-model='loop' type="checkbox" /></label>{{ shortcut }} <button @click="changefile">&#x23CF;</button>
 		</slot>
-		<slot name="file"><input v-show="false" @change="filechanged" type="file" ref='file' /></slot>
+		<slot name="file"><input :id="'file_' + player_id" v-show="false" @change="filechanged" type="file" ref='file' accept="audio/*" /></slot>
 		</div>
 		</script>
 		<div id="player">
 			<div class="cartoucheur">
-				<player v-for="i in 10" title='Click me' :key="i"></player>
+        <audio style="display: none" id="audio_test"></audio>
+				<player v-for="cart in carts" title='Click me' :key="cart.id" :player_id="cart.id" :ofile="cart.source"></player>
 			</div>
-			<p>{{ message }}</p>
+      <input id='multiple_files' type="file" multiple="yes" accept="audio/*" @change='multiple_load' />
+			<p id="log">{{ message }}</p>
 		</div>
-                <script>
+    <script>
 Vue.component('player', {
   template: '#player-template',
   props: {
     title: String,
-  }, 
+    player_id: Number,
+    ofile: File,
+  },
+  computed: {
+    shortcut: function() {
+      if(this.player_id < 10) {
+        return (this.player_id).toString()
+      }
+      else {
+        shortcuts = 'abcdefghijk'
+        return shortcuts[this.player_id-10]
+      }
+    },
+    mysource: function() {
+      if(this.myfile != undefined && this.myfile != ''){
+        return this.loadfile(this.myfile)
+      }
+      else if(this.ofile != undefined){
+        return this.loadfile(this.ofile)
+      }
+    },
+    mytitle: function() {
+      if (this.ofile != undefined){
+        return this.ofile.name
+      }
+      else if (this.myfile != ''){
+        return this.myfile.name
+      }
+      else { 
+        console.log('No file loaded')
+        return 'Click me!'}
+    }
+  },
   data: function () {
 	  return {
-		  mytitle: this.title,
-		  mysource: undefined,
 		  myfile: '',
 		  duration: 0,
 		  current_position: 0,
@@ -59,20 +91,21 @@ Vue.component('player', {
         event.target.pause()
       }
     },
-    filechanged: function(event) {
-      file = event.target.files[0]
-      url = URL.createObjectURL(file)
-      p = this.$refs.player
-      if(p.canPlayType(file.type)) { 
-        this.mysource = url
-        this.mytitle = file.name
+    loadfile: function(source) {
+      url = URL.createObjectURL(source)
+      p = document.getElementById('audio_test')
+      if(p.canPlayType(source.type)) { 
+        return url
       } else {
         console.log("Can't read this.")
       }
     },
+    filechanged: function(event) {
+      this.myfile = event.target.files[0]
+    },
     playing: function(event) {
       this.playingClass = 'started'
-      this.timer = setInterval(this.updateduration, 50)
+      this.timer = setInterval(this.updateduration, 100)
     },
     paused: function() {
       this.playingClass = 'stopped'
@@ -81,18 +114,19 @@ Vue.component('player', {
       }
     },
     toggle: function(event) {
-      if(this.mysource === undefined || this.mysource == '') {
+      if(this.mysource == undefined || this.mysource == '') {
         this.$refs.file.click()
       }
       else {
         player = this.$refs.player
-	if(player.paused) {
+	      if(player.paused) {
           player.currentTime = 0
+          console.log("played something on " + this.player_id)
           player.play()
        	}
-	else {
-	  player.pause()
-	}
+	      else {
+	       player.pause()
+	      }
       }
     }
   }
@@ -102,8 +136,52 @@ var app = new Vue({
   el: '#player',
   data: {
 	  source: '',
-	  message: 'avant cliquette'
+	  message: 'avant cliquette',
+    carts: [],
   },
+  methods: {
+    multiple_load(event) {
+      // Sort files using locale, loosely
+      fileList = Array.from(event.target.files).sort((a, b) => a.name.localeCompare(b.name))
+      carts = []
+      for(var file = 0; file < Math.min(fileList.length, 20); file++) {
+        carts[file] = {id: file+1, source: fileList[file]}
+      }
+      this.carts = carts
+    },
+    pclick(player) {
+      if(player <= this.carts.length) {
+          console.log(`Firing player ${player}`)
+          player = document.getElementById(`player_${player}`)
+          player.click()
+      }
+    },
+    toggle(event) {
+      console.log('hit: ' + event.key + ' / ' + event.code)
+      pid = event.code.match('(Digit|Numpad)([0-9])')
+      if(pid != null && pid.length == 3) {
+        id = pid[2]
+        this.pclick(id)
+      }
+      else if(event.key.match(/^[abcdefghijk]$/)) {
+        shortcuts = 'abcdefghijk'
+        id = shortcuts.indexOf(event.key)
+        pid = id + 10
+        this.pclick(pid)
+      }
+   } 
+  },
+  created() {
+    carts = []
+    for(id = 1; id < 21; id++) {
+      player = { id: id, file: ''}
+      carts[id-1] = player
+    }
+    this.carts = carts
+  },
+  mounted() {
+    window.addEventListener('keydown', this.toggle)
+  }
 })
 		</script>
         </body>
